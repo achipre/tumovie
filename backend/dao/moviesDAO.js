@@ -1,6 +1,6 @@
 let movies
-
 export default class MoviesDAO {
+
   static async injectDB(client){
     if (movies) {
       return
@@ -11,6 +11,7 @@ export default class MoviesDAO {
       console.error(`unable to connect in MoviesDAO: ${error}`);
     }
   }
+
   static async getMovies({ filters = null, page = 0, moviesPerPage = 20} = {}){
     let query
     if (filters) {
@@ -29,11 +30,9 @@ export default class MoviesDAO {
       const movieList = await cursor.toArray()
       const totalNumMovies = await movies.countDocuments(query)
       return { movieList, totalNumMovies }
-      
     } catch (error) {
       console.error(`Unable to issue find command, ${error}`);
       return { movieList: [], totalNumMovies: 0}
-      
     }
   }
 }

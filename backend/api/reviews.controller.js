@@ -1,13 +1,13 @@
-import ReviewsDAO from '../dao/reviews.DAO.js'
+import { ReviewsDAO } from '../dao/reviews.DAO.js'
 
-export default class ReviewDAO{
+export class ReviewsController{
   static async apiPostReview(req,res,next){
     try {
       const movieId = req.body.movie_id
       const review = req.body.review
       const userInfo = {
         name: req.body.name,
-        _id: req.body._id
+        _id: req.body.user_id
       }
       const date = new Date()
       const ReviewResponse = await ReviewsDAO.addReview(
@@ -20,7 +20,6 @@ export default class ReviewDAO{
 
     } catch (e) {
       res.status(500).json({error: e.message})
-      
     }
   }
 
@@ -29,7 +28,7 @@ export default class ReviewDAO{
       const reviewId = req.body.review_id
       const review = req.body.review
       const date = new Date ()
-      const ReviewResponse = await ReviewsDAO.apiUpdateReview(
+      const ReviewResponse = await ReviewsDAO.updateReview(
         reviewId,
         req.body.user_id,
         review,
@@ -39,13 +38,13 @@ export default class ReviewDAO{
       if (error) {
         res.status.json({error})
       }
+      console.log(ReviewResponse);
       if (ReviewResponse.modifiedCount === 0) {
         throw new Error('Unable to update review. User may not be original poster')
       }
-        
+      res.json({status: 'success'})
     } catch (e) {
       res.status(500).json({error: e.message})
-      
     }
   }
 

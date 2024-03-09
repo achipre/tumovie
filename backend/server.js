@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import { MongoClient, ServerApiVersion } from "mongodb";
 import movies from "./api/movies.route.js";
 import MoviesDAO from "./dao/moviesDAO.js";
-import ReviewsDAO from "./dao/reviews.DAO.js";
+import {ReviewsDAO} from "./dao/reviews.DAO.js";
 
 const app = express()
 
