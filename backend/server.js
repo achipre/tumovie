@@ -22,7 +22,7 @@ async function run() {
   const client = new MongoClient(process.env.TUMOVIE_DB_URI, {
     serverApi: {
       version: ServerApiVersion.v1,
-      strict: true,
+      strict: false,
       deprecationErrors: true,
     }
   });

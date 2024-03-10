@@ -22,7 +22,7 @@ export class ReviewsDAO {
         user_id: user._id,
         date,
         review,
-        movie_id: movieId
+        movie_id: new ObjectId(movieId)
       }
       return await reviews.insertOne(reviewDoc)
     } catch (e) {
