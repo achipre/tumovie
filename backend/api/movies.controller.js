@@ -6,9 +6,12 @@ export default class MoviesController{
     const page = req.query.page ? parseInt(req.query.page) : 0
 
     let filters = {}
-    if (req.query.rated) {
+    if (req.query.rated && !req.query.title) {
       filters.rated = req.query.rated
-    } else if (req.query.title) {
+    } else if (req.query.title && !req.query.rated) {
+      filters.title = req.query.title
+    } else {
+      filters.rated = req.query.rated
       filters.title = req.query.title
     }
     

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { MovieDateService } from '../services/movies'
+import { Link } from 'react-router-dom'
 
 export const MoviesList = () => {
   const [categoryVisible, setCategoryVisible] = useState(false)
@@ -16,11 +17,6 @@ export const MoviesList = () => {
   const [searchTitle, setSearchTitle] = useState('')
   const [searchRating, setSearchRating] = useState('All categories')
   const [ratings, setRatings] = useState(['All categories'])
-
-  useEffect(() => {
-    retriveMovies()
-    retriveRatingss()
-  }, [])
 
   const retriveMovies = () => {
     MovieDateService.getAll()
@@ -46,9 +42,45 @@ export const MoviesList = () => {
     setSearchTitle(searchTitle)
   }
 
+  const find = (queryRated, queryTitle) => {
+    MovieDateService.find(queryRated, queryTitle)
+      .then(resp => {
+        setMovies(resp.data.movies)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }
+
+  const handleSearch = (e) => {
+    e.preventDefault()
+
+    if (searchRating === 'All categories' && searchTitle === '') return
+    if (searchRating === 'All categories' && searchTitle !== '') {
+      const rating = ''
+      const queryTitle = ('title=' + searchTitle)
+      find(rating, queryTitle)
+    } else if (searchTitle === '') {
+      const title = ''
+      const queryRated = ('rated=' + searchRating)
+      find(queryRated, title)
+    } else {
+      const queryRated = ('rated=' + searchRating + '&')
+      const queryTitle = ('title=' + searchTitle)
+      find(queryRated, queryTitle)
+    }
+  }
   console.log(movies)
 
-  console.log(searchTitle)
+  const handleImgError = (e) => {
+    e.target.src = './imgNotFound.jpeg'
+  }
+
+  useEffect(() => {
+    retriveMovies()
+    retriveRatingss()
+  }, [])
+
   return (
     <>
       <form className="max-w-lg mx-auto">
@@ -114,6 +146,7 @@ export const MoviesList = () => {
             />
             <button
               type="submit"
+              onClick={handleSearch}
               className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white dark:bg-[#F05454] rounded-e-lg dark:hover:bg-[#f05454df]"
             >
               <svg
@@ -135,29 +168,28 @@ export const MoviesList = () => {
           </div>
         </div>
       </form>
-      <main className='w-full mx-auto max-w-7xl p-4 flex flex-wrap gap-3 justify-between'>
+      <main className='w-full mx-auto max-w-7xl p-4 grid [grid-template-columns:repeat(auto-fill,minmax(196px,1fr))] sm:[grid-template-columns:repeat(auto-fill,minmax(220px,1fr))]  gap-3 justify-between'>
       {
-
         movies.map(movie => (
-          <div key={movie._id} className="flex flex-col w-[19%]  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <img className="rounded-t-lg aspect-[0.62] object-cover w-full" src={movie.poster || '/imgNotFound.jpeg'} alt="" />
-            <div className="p-5">
+          <div key={movie._id} className="flex flex-col bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <img className="rounded-t-lg aspect-[0.62] object-cover w-full" src={movie.poster || './imgNotFound.jpeg' } alt={movie.title} onError={handleImgError} />
+            <div className="p-5 flex flex-col h-full">
               <a href="#">
-                <h2 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{movie.title}</h2>
+                <h2 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white line-clamp-3">{movie.title}</h2>
               </a>
-              <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{movie.plot}</p>
-              <a href="#" className="flex gap-2 mt-auto justify-center flex-grow items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:outline-none  dark:bg-blue-600 dark:hover:bg-blue-700 focus-visible:outline-none">
+              <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Rating: {movie.rated || 'N/A'}</p>
+              <p className="h-full mb-3 font-normal text-gray-700 dark:text-gray-400">{movie.plot}</p>
+              <Link to={'/movie/' + movie._id} className=" flex gap-2 justify-center flex-grow items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:outline-none  dark:bg-blue-600 dark:hover:bg-blue-700 focus-visible:outline-none">
                 <span>
                   View Review
                 </span>
                 <svg className="w-3.5 h-3.5" aria-hidden="true" fill="none" viewBox="0 0 14 10">
                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
                 </svg>
-              </a>
+              </Link>
             </div>
           </div>
         ))
-
       }
       </main>
 

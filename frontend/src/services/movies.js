@@ -9,8 +9,8 @@ export class MovieDateService {
     return axios.get(`http://localhost:5050/api/v1/movies/id/${id}`)
   }
 
-  find (query, by = 'title', page = 0) {
-    return axios.get(`http://localhost:5050/api/v1/movies?${by}=${query}&page=${page}`)
+  static find (queryRated = '', queryTitle = '', page = 0) {
+    return axios.get(`http://localhost:5050/api/v1/movies?${queryRated}${queryTitle}&page=${page}`)
   }
 
   createReview (data) {
