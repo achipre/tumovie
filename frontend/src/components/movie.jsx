@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { MovieDateService } from '../services/movies'
 import { Link, useLocation } from 'react-router-dom'
+import { formatDistance } from 'date-fns'
 
 export const Movie = () => {
   const location = useLocation()
@@ -25,6 +26,13 @@ export const Movie = () => {
     getMovie(idMovie)
   }, [idMovie])
 
+  const handleDate = (fecha) => {
+    const actual = new Date()
+    const antiguo = new Date(fecha).toLocaleDateString()
+    const ago = formatDistance(actual, antiguo, { addSuffix: true })
+    return ago
+  }
+
   return (
     <main className='w-full mx-auto max-w-7xl p-4 flex flex-col sm:flex-row gap-6 md:justify-between'>
       <img className="w-full sm:w-[50%] h-auto max-w-lg mx-auto md:m-0 object-cover aspect-[0.66] rounded-lg cursor-pointer self-start" src={movie.poster} alt="image description"/>
@@ -43,12 +51,12 @@ export const Movie = () => {
 
         </section>
         <h2 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 p-6 pt-12">Reviews</h2>
-        {movie.reviews.map(review => (
-          <section className='p-6 pt-0' key={review._id}>
-            <h3 className='font-semibold text-xl capitalize'>{review.name}</h3>
+        {movie.reviews.map(review => {
+          return <section className='p-6 pt-0' key={review._id}>
+            <h3 className=' flex items-center font-semibold text-xl capitalize leading-4'>{review.name}<span className='ml-5 text-sm text-gray-500 font-normal leading-3 self-end'>{handleDate(review.date)}</span></h3>
             <p className='text-gray-600 truncate dark:text-gray-400 italic'><span className='text-4xl text-red-600'>&quot;</span>{review.review}</p>
           </section>
-        ))}
+        })}
       </div>
 
     </main>

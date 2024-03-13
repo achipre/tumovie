@@ -16,6 +16,7 @@ export const App = () => {
     setUser(null)
   }
 
+  console.log(user)
   return (
     <>
       <nav className="bg-white border-gray-200 dark:bg-[#F05454]">
@@ -163,7 +164,7 @@ export const App = () => {
         <Route path='/movies' element={<MoviesList />} />
         <Route path='/movies/:id' element={<Movie />} />
         <Route path='/movies/:id/review' element={<AddReview user={user} />} />
-        <Route path='/login' element={<Login />} />
+        <Route path='/login' element={<Login login={login} />} />
       </Routes>
    </>
 
