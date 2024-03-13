@@ -10,9 +10,6 @@ export default class MoviesController{
       filters.rated = req.query.rated
     } else if (req.query.title && !req.query.rated) {
       filters.title = req.query.title
-    } else {
-      filters.rated = req.query.rated
-      filters.title = req.query.title
     }
     
     const { movieList, totalNumMovies } = await MoviesDAO.getMovies({ filters, page, moviesPerPage })

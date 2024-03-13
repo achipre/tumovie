@@ -23,13 +23,7 @@ export default class MoviesDAO {
         }
       } else if ("rated" in filters && !("title" in filters)) {
         query = {"rated": { $eq: filters['rated']}}
-      } else if ("title" && 'rated' in filters) {
-        query = { 
-          $text: { $search: filters['title'] },
-          // 'rated': { $eq: filters['rated']}
-        }
-        console.log(query);
-      }
+      } 
     }
 
     let cursor

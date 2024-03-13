@@ -5,7 +5,7 @@ export class MovieDateService {
     return axios.get(`http://localhost:5050/api/v1/movies?page=${page}`)
   }
 
-  get (id) {
+  static get (id) {
     return axios.get(`http://localhost:5050/api/v1/movies/id/${id}`)
   }
 

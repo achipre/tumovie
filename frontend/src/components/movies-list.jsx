@@ -52,6 +52,7 @@ export const MoviesList = () => {
       })
   }
 
+  console.log(movies)
   const handleSearch = (e) => {
     e.preventDefault()
 
@@ -70,7 +71,6 @@ export const MoviesList = () => {
       find(queryRated, queryTitle)
     }
   }
-  console.log(movies)
 
   const handleImgError = (e) => {
     e.target.src = './imgNotFound.jpeg'
@@ -83,7 +83,7 @@ export const MoviesList = () => {
 
   return (
     <>
-      <form className="max-w-lg mx-auto">
+      <form className="max-w-lg mx-auto mt-5">
         <div className="flex">
           <div className='relative'>
             <button
@@ -179,7 +179,7 @@ export const MoviesList = () => {
               </a>
               <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Rating: {movie.rated || 'N/A'}</p>
               <p className="h-full mb-3 font-normal text-gray-700 dark:text-gray-400">{movie.plot}</p>
-              <Link to={'/movie/' + movie._id} className=" flex gap-2 justify-center flex-grow items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:outline-none  dark:bg-blue-600 dark:hover:bg-blue-700 focus-visible:outline-none">
+              <Link to={'/movies/' + movie._id} className=" flex gap-2 justify-center flex-grow items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:outline-none  dark:bg-blue-600 dark:hover:bg-blue-700 focus-visible:outline-none">
                 <span>
                   View Review
                 </span>
