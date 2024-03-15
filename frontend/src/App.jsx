@@ -16,7 +16,6 @@ export const App = () => {
     setUser(null)
   }
 
-  console.log(user)
   return (
     <>
       <nav className="bg-white border-gray-200 dark:bg-[#F05454]">
@@ -143,18 +142,17 @@ export const App = () => {
             </li>
             <li>
               {
-                user
-                  ? <a href='#' onClick={logout}
-                className="block py-2 px-3 text-[#FFC3A1] rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-[#FFC3A1] md:dark:hover:text-[#30475E] dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
-                >Logout</a>
-                  : <Link
-                to="/login" onClick={login}
-                className="block py-2 px-3 text-[#FFC3A1] rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:hover:text-[#FFC3A1] md:dark:text-[#30475E] dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
-              >
-                Login
-              </Link>
+                (user?.name === '' || user?.name === undefined)
+                  ? <Link
+                      to="/login" onClick={login}
+                      className="block py-2 px-3 text-[#FFC3A1] rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:hover:text-[#FFC3A1] md:dark:text-[#30475E] dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
+                    >Login</Link>
+                  : <span onClick={logout}
+                      className="cursor-pointer block py-2 px-3 text-[#FFC3A1] rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-[#FFC3A1] md:dark:hover:text-[#30475E] dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
+                    >Logout</span>
               }
             </li>
+              {user && <span className='text-[#FFC3A1]'>{user.name}</span>}
           </ul>
         </div>
       </div>
@@ -162,7 +160,7 @@ export const App = () => {
       <Routes>
         <Route path='/' element={<MoviesList />} />
         <Route path='/movies' element={<MoviesList />} />
-        <Route path='/movies/:id' element={<Movie />} />
+        <Route path='/movies/:id' element={<Movie user={user} />} />
         <Route path='/movies/:id/review' element={<AddReview user={user} />} />
         <Route path='/login' element={<Login login={login} />} />
       </Routes>

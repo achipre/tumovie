@@ -32,10 +32,10 @@ export class ReviewsDAO {
   }
 
   static async updateReview(reviewId, userId, review, date){
-    console.log(new ObjectId(reviewId));
+    console.log(reviewId, userId, review, date);
     try {
       const updateResponse = await reviews.updateOne(
-        {user_id: userId, _id: reviewId },
+        {user_id: userId, _id: new ObjectId(reviewId) },
         {$set: {review, date}}
       )
       return updateResponse

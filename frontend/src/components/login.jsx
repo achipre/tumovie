@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-export const Login = ({ login, history }) => {
+export const Login = ({ login }) => {
+  const navigation = useNavigate()
   const [name, setName] = useState('')
   const [id, setId] = useState('')
 
@@ -14,12 +16,11 @@ export const Login = ({ login, history }) => {
     setId(newId)
   }
 
-  const handleLogin = () => {
+  const handleLogin = async (e) => {
+    e.preventDefault()
     login({ name, id })
-    // history.push('/')
+    navigation('/')
   }
-
-  console.log(name, id)
 
   return (
     <form className="max-w-sm mx-auto py-12">
@@ -39,7 +40,7 @@ export const Login = ({ login, history }) => {
         </span>
         <input onChange={onChangeId} type="text" id="website-admin" className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus-visible:outline-none block flex-1 min-w-0 w-full text-sm p-2.5 " placeholder="Password"/>
       </div>
-      <button onSubmit={handleLogin} type="submit" className=" text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Ingresar</button>
+      <button onClick={handleLogin} type="submit" className=" text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Ingresar</button>
     </form>
 
   )

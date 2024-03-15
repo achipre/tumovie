@@ -52,7 +52,6 @@ export const MoviesList = () => {
       })
   }
 
-  console.log(movies)
   const handleSearch = (e) => {
     e.preventDefault()
 
