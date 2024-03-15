@@ -18,10 +18,18 @@ export const MoviesList = () => {
   const [searchRating, setSearchRating] = useState('All categories')
   const [ratings, setRatings] = useState(['All categories'])
 
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(0)
+  const [entriesPerPage, setEntriesPerPage] = useState(0)
+  const [currentSearchMode, setCurrentSearchMode] = useState('')
+
   const retriveMovies = () => {
-    MovieDateService.getAll()
+    setCurrentSearchMode('')
+    MovieDateService.getAll(currentPage)
       .then((resp) => {
         setMovies(resp.data.movies)
+        setCurrentPage(resp.data.page)
+        setEntriesPerPage(resp.data.entries_per_page)
       })
       .catch((e) => {
         console.log(e)
@@ -37,13 +45,23 @@ export const MoviesList = () => {
       })
   }
 
+  const retriveNextMovies = () => {
+    if (searchTitle === '') {
+      handleSearch()
+    } else if (searchRating === 'All categories') {
+      handleSearch()
+    } else {
+      retriveMovies()
+    }
+  }
+
   const onChangeSearchTitle = (e) => {
     const searchTitle = e.target.value
     setSearchTitle(searchTitle)
   }
 
   const find = (queryRated, queryTitle) => {
-    MovieDateService.find(queryRated, queryTitle)
+    MovieDateService.find(queryRated, queryTitle, currentPage)
       .then(resp => {
         setMovies(resp.data.movies)
       })
@@ -53,16 +71,17 @@ export const MoviesList = () => {
   }
 
   const handleSearch = (e) => {
-    e.preventDefault()
-
+    // e.preventDefault()
     if (searchRating === 'All categories' && searchTitle === '') return
     if (searchRating === 'All categories' && searchTitle !== '') {
       const rating = ''
       const queryTitle = ('title=' + searchTitle)
+      setCurrentSearchMode('searchTitle')
       find(rating, queryTitle)
     } else if (searchTitle === '') {
       const title = ''
       const queryRated = ('rated=' + searchRating)
+      setCurrentSearchMode('searchRating')
       find(queryRated, title)
     } else {
       const queryRated = ('rated=' + searchRating + '&')
@@ -79,6 +98,10 @@ export const MoviesList = () => {
     retriveMovies()
     retriveRatingss()
   }, [])
+
+  useEffect(() => {
+    retriveNextMovies()
+  }, [currentPage])
 
   return (
     <>
@@ -191,6 +214,16 @@ export const MoviesList = () => {
         ))
       }
       </main>
+      <div className="flex flex-col items-center my-8 mb-12">
+        <div className="inline-flex mt-2 xs:mt-0">
+            <button className="flex cursor-default items-center justify-center px-3 h-8 text-sm font-medium text-gray-800 bg-gray-200 rounded-s">
+            Showing page: {currentPage}
+            </button>
+            <button onClick={() => setCurrentPage(currentPage + 1)} className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                Get Next 20 results
+            </button>
+        </div>
+      </div>
 
     </>
   )

@@ -34,14 +34,14 @@ export const Movie = ({ user }) => {
 
   const handleDelete = (reviewId) => {
     MovieDateService.deleteReview(reviewId, user?.id)
-      .then(() => {
-        const newReviews = movie?.reviews?.slice(movie?.reviews._id !== reviewId)
-        setMovie(...movie, newReviews)
-      })
+      .then(() =>
+        setMovie(prev => {
+          const newReview = prev.reviews.filter((review) => review._id !== reviewId)
+          return { ...prev, reviews: newReview }
+        })
+      )
       .catch(e => console.log(e))
   }
-  console.log(movie)
-
   return (
     <main className='w-full mx-auto max-w-7xl p-4 flex flex-col sm:flex-row gap-6 md:justify-between'>
       <img className="w-full sm:w-[50%] h-auto max-w-lg mx-auto md:m-0 object-cover aspect-[0.66] rounded-lg cursor-pointer self-start" src={movie?.poster} alt="image description"/>
